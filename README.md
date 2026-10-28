@@ -27,6 +27,24 @@ python -m http.server 8123
 
 现在的三个系列：`#/series/landscape`（风景 · 06.25–26 傍晚与深夜）· `#/series/campus`（大学 · 06.27 上午）· `#/series/street`（保定街头 · 06.27 日间）。
 
+## 发给别人看 / 离线交付
+
+两种方式，按需要选：
+
+**1）发文件（离线可看）**：整个站点打包成 zip，解压后双击 `index.html` 即可，不需要装任何东西、不需要联网。
+
+```bash
+python tools/pack.py        # 会在桌面生成「阔之神来之眼-摄影作品集.zip」
+```
+
+注意 `file://` 的一个坑：浏览器会把本地字体的来源当成 opaque origin，`@font-face` 的跨源请求直接被 CORS 拒掉。所以 `index.html` 里有一段判断——`location.protocol === 'file:'` 时改用 `assets/fonts/fonts-inline.css`（woff2 已 base64 内联），用 HTTP(S) 打开时仍走 `fonts.css`，字体照常独立缓存。换字体后记得重新生成：
+
+```bash
+python tools/inline-fonts.py
+```
+
+**2）发链接（在线）**：GitHub Pages 已开启 —— https://panda130637.github.io/kuo-zhi-photography/
+
 ## 图片是怎么放的
 
 两级结构，站点自己会用：

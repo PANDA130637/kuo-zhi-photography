@@ -12,15 +12,22 @@
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2326272A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23B8A58A'/%3E%3C/svg%3E" data-page-node-id="N9cCeMtBEQCi7rMLHKzVGc"
     />
 
-    <link
-      rel="preload"
-      href="assets/fonts/space-grotesk-latin-wght-normal.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin data-page-node-id="9M5CEPXnPSGDpq9OlS91d5"
-    />
-
-    <link rel="stylesheet" href="assets/fonts/fonts.css" data-page-node-id="vj1tCX41OqWY4ysKldKpDe" />
+    <link rel="stylesheet" href="assets/fonts/fonts.css" id="font-css" data-page-node-id="vj1tCX41OqWY4ysKldKpDe" />
+    <script>
+      /* file:// 下浏览器把本地字体来源当成 opaque origin，@font-face 会被 CORS 拒掉，
+         所以双击打开时换成 base64 内联版；用 HTTP(S) 打开仍走 fonts.css，字体照常独立缓存。 */
+      if (location.protocol === 'file:') {
+        document.getElementById('font-css').href = 'assets/fonts/fonts-inline.css';
+      } else {
+        var pre = document.createElement('link');
+        pre.rel = 'preload';
+        pre.as = 'font';
+        pre.type = 'font/woff2';
+        pre.crossOrigin = 'anonymous';
+        pre.href = 'assets/fonts/space-grotesk-latin-wght-normal.woff2';
+        document.head.appendChild(pre);
+      }
+    </script>
     <link rel="stylesheet" href="assets/css/tokens.css" data-page-node-id="ODGoynMy6dgCccvPvl5vkh" />
     <link rel="stylesheet" href="assets/css/base.css" data-page-node-id="gDNJsN1EpytVHdW7GutZ2W" />
     <link rel="stylesheet" href="assets/css/layout.css" data-page-node-id="9cRFuVANKV6zaehoMBI1IW" />
