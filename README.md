@@ -31,11 +31,21 @@ python -m http.server 8123
 
 两种方式，按需要选：
 
-**1）发文件（离线可看）**：整个站点打包成 zip，解压后双击 `index.html` 即可，不需要装任何东西、不需要联网。
+**1）发文件（离线可看）**，两种粒度：
 
-```bash
-python tools/pack.py        # 会在桌面生成「阔之神来之眼-摄影作品集.zip」
-```
+- **单文件版**（推荐，最省事）：一个 HTML 装下全部——样式、脚本、字体、照片全内联，微信 / 邮件直接发，对方双击即看，连解压都不用。
+
+  ```bash
+  node tools/build-single.cjs   # 默认输出到桌面「阔之神来之眼-单文件版.html」（约 10 MB）
+  ```
+
+  照片会先重编码（长边 1440 · JPEG q0.72）再内联，要更清晰改环境变量 `SINGLE_LONG_EDGE` / `SINGLE_QUALITY`。
+
+- **整站 zip**：解压后双击 `index.html`，画质是原始的 2000px。
+
+  ```bash
+  python tools/pack.py        # 会在桌面生成「阔之神来之眼-摄影作品集.zip」
+  ```
 
 注意 `file://` 的一个坑：浏览器会把本地字体的来源当成 opaque origin，`@font-face` 的跨源请求直接被 CORS 拒掉。所以 `index.html` 里有一段判断——`location.protocol === 'file:'` 时改用 `assets/fonts/fonts-inline.css`（woff2 已 base64 内联），用 HTTP(S) 打开时仍走 `fonts.css`，字体照常独立缓存。换字体后记得重新生成：
 
