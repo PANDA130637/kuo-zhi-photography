@@ -1,0 +1,60 @@
+:root {
+  /* 中性中深灰三层 */
+  --bg: #26272A;
+  --panel: #2E2F33;
+  --card: #37383D;
+
+  /* 唯一强调色：暖沙 */
+  --accent: #B8A58A;
+
+  /* 文字三级 */
+  --text: #F0EFEC;
+  --text-dim: #A6A5A1;
+  --text-faint: #6E6D69;
+
+  /* 线与遮罩 */
+  --hair: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-bg: rgba(46, 47, 51, 0.65);
+  --scrim: rgba(20, 20, 22, 0.55);
+  --lb-bg: #1A1B1D;
+
+  /* 字体 */
+  --font-display: 'Space Grotesk Variable', 'PingFang SC', 'HarmonyOS Sans SC',
+    'Microsoft YaHei', 'Source Han Sans SC', sans-serif;
+  --font-body: 'Inter Variable', 'PingFang SC', 'HarmonyOS Sans SC',
+    'Microsoft YaHei', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', SFMono-Regular, Consolas,
+    'Cascadia Mono', monospace;
+
+  /* 动效 */
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --t: 240ms;
+  --t-slow: 300ms;
+  --radius: 5px;
+
+  /* 画册两个全局旋钮：高度带 / 宽度上限 */
+  --gh: 72vh;
+  --gw: 76vw;
+
+  /* 瀑布流列间距 */
+  --tile-gap: 48px;
+
+  /* 留白节奏 */
+  --pad-page: 56px;
+  --pad-section: 120px;
+
+  /* 导航高度 */
+  --nav-h: 76px;
+  --nav-h-compact: 60px;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --pad-page: 24px;
+    --pad-section: 72px;
+    --tile-gap: 24px;
+    --gh: 68vh;
+    --gw: 86vw;
+  }
+}

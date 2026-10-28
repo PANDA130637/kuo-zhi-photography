@@ -1,0 +1,409 @@
+/* ==================== 首页 Hero ==================== */
+
+.hero {
+  position: relative;
+  height: 100dvh;
+  min-height: 560px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: -12%;
+  pointer-events: none;
+  background: radial-gradient(closest-side at 50% 46%, rgba(240, 239, 236, 0.05),
+      transparent 72%);
+  filter: blur(120px);
+}
+
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 600ms var(--ease), visibility 0s linear 600ms;
+}
+
+.hero__slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 600ms var(--ease), visibility 0s linear 0s;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__media > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 500ms var(--ease);
+}
+
+.hero__media > img.is-loaded {
+  opacity: 1;
+}
+
+/* 竖幅封面：完整悬挂，不裁切。
+   必须用 flex 而不是 grid place-items:center——
+   grid 的 auto 行轨会让 img 的 height:100% 无法解析，退回自然尺寸。 */
+.hero__slide--portrait .hero__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-h) + 5vh) var(--pad-page) 16vh;
+}
+
+.hero__slide--portrait .hero__media > img {
+  height: 100%;
+  width: auto;
+  border: 1px solid var(--hair);
+  border-radius: var(--radius);
+}
+
+.hero__scrim {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 52%;
+  height: 48%;
+  background: linear-gradient(to top right, var(--scrim), rgba(20, 20, 22, 0) 70%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero__hit {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: block;
+}
+
+.hero__info {
+  position: absolute;
+  left: var(--pad-page);
+  bottom: 88px;
+  z-index: 4;
+  max-width: min(52%, 620px);
+  pointer-events: none;
+}
+
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(36px, 6vw, 78px);
+  letter-spacing: 0.06em;
+  line-height: 1.06;
+  transition: transform 600ms var(--ease), opacity 600ms var(--ease);
+}
+
+.hero__slide:not(.is-active) .hero__title {
+  transform: translateY(10px);
+  opacity: 0;
+}
+
+.hero__slide.is-active .hero__title {
+  transform: none;
+  opacity: 1;
+  transition-delay: 120ms;
+}
+
+.hero__meta {
+  margin-top: 18px;
+  color: var(--text-dim);
+}
+
+.hero__enter {
+  margin-top: 22px;
+  color: var(--text-dim);
+}
+
+.hero__dots {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 5;
+}
+
+.hero__dot {
+  padding: 22px 0;
+  background: none;
+  border: 0;
+}
+
+.hero__dot::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: rgba(240, 239, 236, 0.28);
+  transition: width 260ms var(--ease), background-color 260ms var(--ease);
+}
+
+.hero__dot:hover::before {
+  background: rgba(240, 239, 236, 0.6);
+}
+
+.hero__dot[aria-current='true']::before {
+  width: 40px;
+  background: var(--accent);
+}
+
+/* ==================== 系列总览：原生比例瀑布流 ==================== */
+
+.series-grid {
+  columns: 3;
+  column-gap: var(--tile-gap);
+}
+
+@media (max-width: 1180px) {
+  .series-grid {
+    columns: 2;
+  }
+}
+
+@media (max-width: 680px) {
+  .series-grid {
+    columns: 1;
+  }
+}
+
+.series-card {
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 64px;
+  transition: opacity var(--t-slow) var(--ease);
+}
+
+.series-card:hover .series-card__title {
+  color: var(--text);
+}
+
+.series-card__media {
+  aspect-ratio: var(--r, 1.5);
+}
+
+.series-card__body {
+  padding-top: 20px;
+}
+
+.series-card__title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(20px, 2vw, 25px);
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  transition: color var(--t) var(--ease);
+}
+
+.series-card__desc {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-faint);
+  max-width: 46ch;
+}
+
+/* ==================== 系列详情：横向画册 ==================== */
+
+body[data-view='series-detail'] .nav {
+  display: none;
+}
+
+/* 详情页独占整屏，避免页脚把纵向滚动条拖进来 */
+body[data-view='series-detail'] .footer {
+  display: none;
+}
+
+.album__bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 var(--pad-page);
+  border-width: 0 0 1px;
+  border-style: solid;
+}
+
+.album__bar-title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 17px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.album__bar-meta {
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .album__bar-meta {
+    display: none;
+  }
+}
+
+.gallery {
+  position: relative;
+  flex: 1 1 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  cursor: grab;
+  contain: layout paint;
+}
+
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery.is-dragging {
+  scroll-snap-type: none;
+  cursor: grabbing;
+  user-select: none;
+}
+
+.gallery.is-dragging .gallery__item {
+  pointer-events: none;
+}
+
+.gallery__track {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  height: 100%;
+  padding: 8px 0;
+}
+
+.gallery__spacer {
+  flex: 0 0 auto;
+  width: 24px;
+}
+
+.gallery__item {
+  flex: 0 0 auto;
+  --r: 1.5;
+  --h: min(var(--gh), calc(var(--gw) / var(--r)));
+  width: calc(var(--h) * var(--r));
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.gallery__frame {
+  width: 100%;
+  height: var(--h);
+  cursor: zoom-in;
+}
+
+.gallery__cap {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+}
+
+.gallery__cap-title {
+  color: var(--text-dim);
+}
+
+.gallery__cap-num {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.gallery__divider {
+  flex: 0 0 auto;
+  width: 150px;
+  height: var(--gh);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  scroll-snap-align: none;
+}
+
+.gallery__divider::before {
+  content: '';
+  flex: 1 1 auto;
+  width: 1px;
+  background: var(--hair);
+}
+
+.gallery__divider span {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--text-faint);
+  white-space: nowrap;
+  padding-bottom: 4px;
+}
+
+@media (max-width: 900px) {
+  .gallery__divider {
+    width: 88px;
+  }
+
+  .gallery__track {
+    gap: 24px;
+  }
+}
+
+/* 详情页出场动画 */
+
+.album__enter .gallery__item {
+  animation: album-in 620ms var(--ease) both;
+  animation-delay: var(--i-delay, 0ms);
+}
+
+@keyframes album-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==================== 关于页 ==================== */
+
+.about__intro p + p {
+  margin-top: 22px;
+}
+
+/* ==================== 404 ==================== */
+
+.notfound {
+  min-height: 70dvh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 20px;
+  padding: var(--nav-h) var(--pad-page);
+}

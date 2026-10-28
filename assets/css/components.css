@@ -1,0 +1,301 @@
+/* ---------- 玻璃态 ---------- */
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px) saturate(105%);
+  -webkit-backdrop-filter: blur(10px) saturate(105%);
+  border: 1px solid var(--glass-border);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: var(--panel);
+  }
+}
+
+/* ---------- 极低透明度光晕 ---------- */
+
+.glow {
+  position: relative;
+}
+
+.glow::before {
+  content: '';
+  position: absolute;
+  inset: -14%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(240, 239, 236, 0.045), transparent 72%);
+  filter: blur(120px);
+}
+
+/* ---------- 图片容器通用悬停 ---------- */
+
+.shot {
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--hair);
+}
+
+.shot > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: transform var(--t-slow) var(--ease), filter var(--t-slow) var(--ease),
+    opacity 420ms var(--ease);
+}
+
+.shot > img.is-loaded {
+  opacity: 1;
+}
+
+.shot:hover > img.is-loaded {
+  transform: scale(1.015);
+  filter: brightness(1.04);
+}
+
+/* ---------- 细箭头链接 ---------- */
+
+.arrow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  transition: color var(--t) var(--ease);
+}
+
+.arrow-link svg {
+  transition: transform var(--t-slow) var(--ease);
+}
+
+.arrow-link:hover {
+  color: var(--text);
+}
+
+.arrow-link:hover svg {
+  transform: translateX(5px);
+}
+
+/* ---------- 自定义光标 ---------- */
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text);
+  border: 1px solid transparent;
+  transform: translate3d(-50%, -50%, 0);
+  translate: var(--cx, -100px) var(--cy, -100px);
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: width var(--t-slow) var(--ease), height var(--t-slow) var(--ease),
+    background-color var(--t-slow) var(--ease), border-color var(--t-slow) var(--ease),
+    opacity 200ms var(--ease);
+}
+
+.cursor.is-visible {
+  opacity: 1;
+}
+
+.cursor.is-over-media {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border-color: var(--text);
+}
+
+html.has-cursor .cursor {
+  mix-blend-mode: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    transition: opacity 200ms var(--ease);
+  }
+}
+
+/* ---------- 画册左右箭头 ---------- */
+
+.album__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--text-dim);
+  background: rgba(38, 39, 42, 0.4);
+  border-radius: 50%;
+  opacity: 0.55;
+  transition: opacity var(--t) var(--ease), color var(--t) var(--ease),
+    background-color var(--t) var(--ease);
+  z-index: 5;
+}
+
+.album__arrow:hover {
+  opacity: 1;
+  color: var(--text);
+  background: rgba(55, 56, 61, 0.72);
+}
+
+.album__arrow[disabled] {
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+.album__arrow--prev {
+  left: 16px;
+}
+
+.album__arrow--next {
+  right: 16px;
+}
+
+@media (max-width: 900px) {
+  .album__arrow {
+    display: none;
+  }
+}
+
+/* ---------- 画册进度条 ---------- */
+
+.album__progress {
+  position: relative;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+  margin: 0 var(--pad-page) 28px;
+}
+
+.album__progress-bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: var(--text-dim);
+  transition: width 160ms linear;
+}
+
+/* ---------- Lightbox ---------- */
+
+.lightbox {
+  padding: 0;
+  border: 0;
+  background: var(--lb-bg);
+  color: var(--text);
+  width: 100vw;
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+.lightbox::backdrop {
+  background: var(--lb-bg);
+}
+
+.lb__stage {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 100dvh;
+}
+
+.lb__imgwrap {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: 76px 88px 12px;
+}
+
+@media (max-width: 760px) {
+  .lb__imgwrap {
+    padding: 72px 16px 8px;
+  }
+}
+
+.lb__img {
+  max-width: 92vw;
+  max-height: 82vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 240ms var(--ease);
+}
+
+.lb__img.is-loaded {
+  opacity: 1;
+}
+
+.lb__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 0 var(--pad-page) 34px;
+  text-align: center;
+}
+
+.lb__meta strong {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+
+.lb__close,
+.lb__nav {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  color: var(--text-dim);
+  transition: color var(--t) var(--ease), opacity var(--t) var(--ease);
+}
+
+.lb__close {
+  top: 20px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  font-size: 22px;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.lb__nav {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  opacity: 0.5;
+}
+
+.lb__nav--prev {
+  left: 20px;
+}
+
+.lb__nav--next {
+  right: 20px;
+}
+
+.lb__close:hover,
+.lb__nav:hover {
+  color: var(--text);
+  opacity: 1;
+}
+
+@media (max-width: 760px) {
+  .lb__nav {
+    display: none;
+  }
+}

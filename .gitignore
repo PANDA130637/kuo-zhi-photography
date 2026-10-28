@@ -1,0 +1,7 @@
+# WorkBuddy 本地会话数据，不发布
+.workbuddy/
+
+# 系统杂项
+.DS_Store
+Thumbs.db
+desktop.ini
